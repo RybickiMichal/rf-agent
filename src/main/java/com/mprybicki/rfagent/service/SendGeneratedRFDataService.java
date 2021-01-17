@@ -2,7 +2,6 @@ package com.mprybicki.rfagent.service;
 
 import com.mprybicki.rfagent.model.RFData;
 import com.mprybicki.rfagent.model.User;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -60,7 +59,11 @@ public class SendGeneratedRFDataService {
     }
 
     private RFData generateRFData() {
-        return new RFData(random.nextInt(10), generateRandomDouble(0.0, 10.0), random.nextInt(10));
+        return new RFData(generateRandomInteger(-90, 90), generateRandomDouble(100.0, 400.0), generateRandomInteger(90,440));
+    }
+
+    private Integer generateRandomInteger(Integer rangeMin, Integer rangeMax) {
+        return random.nextInt(rangeMax - rangeMin) + rangeMax;
     }
 
     private Double generateRandomDouble(Double rangeMin, Double rangeMax) {
