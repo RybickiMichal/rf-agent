@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -86,6 +87,6 @@ public class SendGeneratedRFDataService {
     }
 
     private void register() {
-        restTemplate.postForEntity(gatewayUrl + "register", new User(user, password), String.class);
+        restTemplate.postForEntity(gatewayUrl + "register", new User(user, password, List.of("SendRFDataRole")), String.class);
     }
 }
