@@ -47,7 +47,6 @@ public class SendGeneratedRFDataService {
             headers.setBearerAuth(token);
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<RFData> request = new HttpEntity<>(generateRFData(), headers);
-            log.info(gatewayUrl + "rf-data");
             responseEntity = restTemplate.exchange(gatewayUrl + "rf-data", HttpMethod.POST, request, String.class);
             log.info("generated rf data sent");
         } catch (HttpClientErrorException | HttpServerErrorException exception) {
