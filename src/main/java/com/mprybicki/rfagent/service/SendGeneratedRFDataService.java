@@ -33,7 +33,7 @@ public class SendGeneratedRFDataService {
     @Value("${rf.agent.password}")
     private String password;
 
-    private static String token;
+    private static String authorizationHeader;
 
     public SendGeneratedRFDataService(RestTemplate restTemplate, Random random) {
         this.restTemplate = restTemplate;
@@ -44,7 +44,7 @@ public class SendGeneratedRFDataService {
         ResponseEntity<String> responseEntity = null;
         try {
             HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth(token);
+            headers.setBearerAuth(authorizationHeader);
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<RFData> request = new HttpEntity<>(generateRFData(), headers);
             responseEntity = restTemplate.exchange(gatewayUrl + "rf-data", HttpMethod.POST, request, String.class);
@@ -53,17 +53,13 @@ public class SendGeneratedRFDataService {
             log.warn("user is not authorized or service is unavailable");
         }
 
-        if (responseEntity == null || responseEntity.getStatusCode().value() == 401 || responseEntity.getStatusCode().value() == 500) {
-            token = login();
+        if (responseEntity == null || responseEntity.getStatusCode().value() == 401) {
+            authorizationHeader = login();
         }
     }
 
     private RFData generateRFData() {
-        return new RFData(generateRandomInteger(-90, 90), generateRandomDouble(100.0, 400.0), generateRandomInteger(90,440));
-    }
-
-    private Integer generateRandomInteger(Integer rangeMin, Integer rangeMax) {
-        return random.nextInt(rangeMax - rangeMin) + rangeMax;
+        return new RFData(random.nextInt(180) - 90, generateRandomDouble(100.0, 400.0), random.nextInt(400) + 90);
     }
 
     private Double generateRandomDouble(Double rangeMin, Double rangeMax) {

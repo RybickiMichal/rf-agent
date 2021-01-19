@@ -9,7 +9,6 @@ import javax.validation.constraints.Min;
 @Getter
 public class RFData {
 
-    @Min(0)
     double rssi;
 
     @Min(0)
